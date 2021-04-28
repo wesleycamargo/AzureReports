@@ -1,12 +1,11 @@
-# az login
-
 [CmdletBinding()]
 param (
     [string] $outputPath = ".\report"
 )
 
-$resources = az resource list -o json | ConvertFrom-Json
+az login
 
+$resources = az resource list -o json | ConvertFrom-Json
 
 $resourcesExport = New-Object System.Collections.ArrayList($null)
 
@@ -23,11 +22,11 @@ foreach ($resource in $resources) {
 
 }
 
-$date = (Get-Date).Date.ToString("dd-MM-yy-HH-mm")
+$date = (Get-Date).ToString("yyyy-MM-dd-HH-mm")
 $fileName = "Resources-$date.csv"
 
 $fullFilePath = Join-Path -Path $outputPath -ChildPath $fileName
 
 New-Item -ItemType Directory -Force -Path $outputPath 
 
-$resourcesExport | Export-Csv -NoTypeInformation -Append -Path $fullFilePath -Force #-Delimiter ";" 
+$resourcesExport | Export-Csv -NoTypeInformation -Append -Path $fullFilePath -Force -Delimiter ";" 
